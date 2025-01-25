@@ -3,29 +3,31 @@
 declare(strict_types = 1);
 
 // Your Code
-function getfiletransaction(): array
+function getTransactionFiles(string $dirpath): array
 {
     $files = [];
-    foreach(scandir(FILES_PATH) as $file){
-        if(is_dir($file)){
+
+    foreach(scandir($dirpath) as $file) {
+        if(is_dir($file)) {
             continue;
         }
-        $files[] = $file;
+        $files[] = $dirpath . $file;
     }
     return $files;
 }
 
-function getTransactions(string $file): array
+function getTransactionFile(string $fileName): array
 {
-    if(!file_exists(FILES_PATH . $file)){
-        trigger_error("File not found", E_USER_ERROR);
+    if(!file_exists($fileName)) {
+        trigger_error("File $fileName does not exist", E_USER_ERROR);
     }
-    $file = fopen($file, 'r');
+    $file = fopen($fileName, 'r');
     fgetcsv($file);
     $transactions = [];
-    while(!feof($file)){
-        $transactions[] = fgetcsv($file);
+    while(($transaction = fgetcsv($file)) !== false) {
+        $transactions[] = $transaction;
     }
-    fclose($file);
+
     return $transactions;
 }
+require VIEWS_PATH . 'transactions.php';
