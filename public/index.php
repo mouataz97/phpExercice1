@@ -12,4 +12,8 @@ define('VIEWS_PATH', $root . 'views' . DIRECTORY_SEPARATOR);
 require APP_PATH . 'App.php';
 
 $file = getfiletransaction();
-var_dump($file);
+
+foreach($file as $f){
+    $transactions = getTransactions($f);
+}
+print_r($transactions);
